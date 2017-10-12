@@ -3,13 +3,8 @@ package mobidoo.co.kr.guntermvpsample.view;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import mobidoo.co.kr.guntermvpsample.model.Android;
 import mobidoo.co.kr.guntermvpsample.model.source.main.MainRepository;
 import mobidoo.co.kr.guntermvpsample.utills.NetworkUtils;
 import mobidoo.co.kr.guntermvpsample.view.adapter.contract.MainAdapterContract;
@@ -76,47 +71,9 @@ public class MainPresenter implements MainContract.Presneter {
                 .doOnNext(data -> Log.d(TAG,data.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableObserver<List<Android>>() {
-                    @Override
-                    public void onNext(@NonNull List<Android> androids) {
-                        adapterModel.addItems(androids);
-                        adapterView.notifyAdapter();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        view.showToast(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        view.showToast("complete");
-                    }
-                });
-
-
-
-
-/*        mainRepository.getData()
-                .doOnNext(data -> Log.d(TAG,data.toString()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableObserver<List<Android>>() {
-                    @Override
-                    public void onNext(@NonNull List<Android> androids) {
-                        adapterModel.addItems(androids);
-                        adapterView.notifyAdapter();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        view.showToast(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        view.showToast("complete");
-                    }
-                });*/
+                .subscribe(data->{
+                    adapterModel.addItems(data);
+                    adapterView.notifyAdapter();
+                },error-> view.showToast(error.getLocalizedMessage()));
     }
 }

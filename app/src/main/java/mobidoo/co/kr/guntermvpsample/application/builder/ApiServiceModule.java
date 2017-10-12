@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 @Module
-public class HereosApiServiceModule {
+public class ApiServiceModule {
 
     public static final String BASE_URL = "https://api.learn2crack.com/";
 
